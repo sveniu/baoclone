@@ -393,7 +393,11 @@ static void bf888s_print_config(FILE *out, int verbose)
             continue;
         }
 
-        fprintf(out, "%5d   %8.4f ", i + 1, rx_hz / 1000000.0);
+        // Show the 10 Hz digit only when needed, e.g. 446.16875 for PMR446.
+        if (rx_hz % 100 == 0)
+            fprintf(out, "%5d   %8.4f ", i + 1, rx_hz / 1000000.0);
+        else
+            fprintf(out, "%5d   %9.5f ", i + 1, rx_hz / 1000000.0);
         print_offset(out, tx_hz - rx_hz);
         fprintf(out, " ");
         print_squelch(out, rx_ctcs, rx_dcs);
