@@ -287,8 +287,8 @@ static void setup_channel(int i, double rx_mhz, double tx_mhz, int rq, int tq, i
 {
     memory_channel_t *ch = i + (memory_channel_t *)&radio_mem[0x10];
 
-    ch->rxfreq    = int_to_bcd((int)(rx_mhz * 100000.0));
-    ch->txfreq    = int_to_bcd((int)(tx_mhz * 100000.0));
+    ch->rxfreq    = int_to_bcd(iround(rx_mhz * 100000.0));
+    ch->txfreq    = int_to_bcd(iround(tx_mhz * 100000.0));
     ch->rxtone    = rq;
     ch->txtone    = tq;
     ch->highpower = highpower;
@@ -656,7 +656,7 @@ static int bf888s_parse_row(int table_id, int first_row, char *line)
     char tq_str[256], power_str[256], wide_str[256], scan_str[256];
     char bcl_str[256], scramble_str[256];
     int num, rq, tq, highpower, wide, scan, bcl, scramble;
-    float rx_mhz, txoff_mhz;
+    double rx_mhz, txoff_mhz;
 
     if (sscanf(line, "%s %s %s %s %s %s %s %s %s %s", num_str, rxfreq_str, offset_str, rq_str,
                tq_str, power_str, wide_str, scan_str, bcl_str, scramble_str) != 10)
@@ -667,11 +667,11 @@ static int bf888s_parse_row(int table_id, int first_row, char *line)
         fprintf(stderr, "Bad channel number.\n");
         return 0;
     }
-    if (sscanf(rxfreq_str, "%f", &rx_mhz) != 1 || !is_valid_frequency(rx_mhz)) {
+    if (sscanf(rxfreq_str, "%lf", &rx_mhz) != 1 || !is_valid_frequency(rx_mhz)) {
         fprintf(stderr, "Bad receive frequency.\n");
         return 0;
     }
-    if (sscanf(offset_str, "%f", &txoff_mhz) != 1 || !is_valid_frequency(rx_mhz + txoff_mhz)) {
+    if (sscanf(offset_str, "%lf", &txoff_mhz) != 1 || !is_valid_frequency(rx_mhz + txoff_mhz)) {
         fprintf(stderr, "Bad transmit offset.\n");
         return 0;
     }
