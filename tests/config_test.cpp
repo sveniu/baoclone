@@ -119,6 +119,8 @@ Channel Receive  TxOffset R-Squel T-Squel Power FM     Scan BCL Scramble
     3   446.16875 0          -       -    Low   Narrow +    +   -
     4   446.19375 0          -       -    Low   Narrow +    +   -
     5   446.1500  0          -       -    Low   Narrow +    +   -
+    6   446.1500  +0.00625   -       -    Low   Narrow +    +   -
+    7   446.1500  -5.125     -       -    Low   Narrow +    +   -
 )");
     radio_read_image(TEST_DIR "/../examples/bf-888s-factory.img");
     radio_parse_config("bf_888s_pmr446_input.conf");
@@ -129,12 +131,14 @@ Channel Receive  TxOffset R-Squel T-Squel Power FM     Scan BCL Scramble
     fclose(output);
 
     auto lines = file_contents_split("bf_888s_pmr446.conf");
-    ASSERT_GE(lines.size(), 7u);
+    ASSERT_GE(lines.size(), 9u);
     EXPECT_EQ(lines[2], "    1   446.00625  0          -       -    Low   Narrow +    +   -");
     EXPECT_EQ(lines[3], "    2   446.11875  0          -       -    Low   Narrow +    +   -");
     EXPECT_EQ(lines[4], "    3   446.16875  0          -       -    Low   Narrow +    +   -");
     EXPECT_EQ(lines[5], "    4   446.19375  0          -       -    Low   Narrow +    +   -");
     EXPECT_EQ(lines[6], "    5   446.1500  0          -       -    Low   Narrow +    +   -");
+    EXPECT_EQ(lines[7], "    6   446.1500 +0.00625    -       -    Low   Narrow +    +   -");
+    EXPECT_EQ(lines[8], "    7   446.1500 -5.125      -       -    Low   Narrow +    +   -");
 }
 
 TEST(config, bf_888s_v2_factory)
